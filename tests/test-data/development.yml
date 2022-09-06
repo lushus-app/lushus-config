@@ -1,0 +1,27 @@
+server:
+  host: "localhost"
+  port: 3000
+
+databases:
+  - id: database
+    url: "postgres://user:password@localhost:5432/development"
+
+  - id: backup
+    scheme: "postgres"
+    username: "user"
+    password: "password"
+    host: "localhost"
+    port: 5432
+    name: "backup"
+
+  - id: cache
+    scheme: "redis"
+    username: ""
+    password: "password"
+    host: "localhost"
+    port: 6379
+    name: "1"
+
+session:
+  encryption_key: "abc-123-def"
+  secure_cookies: true

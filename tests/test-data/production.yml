@@ -1,0 +1,11 @@
+server:
+  host: "localhost"
+  port: 3000
+
+databases:
+  - id: database
+    url: {{ env }}
+
+session:
+  encryption_key: "abc-123-def"
+  secure_cookies: true
