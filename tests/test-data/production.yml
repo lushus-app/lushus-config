@@ -4,8 +4,7 @@ server:
 
 databases:
   - id: database
-    url: {{ env }}
+    url: "{{ env DATABASE_URL }}"
 
-session:
-  encryption_key: "abc-123-def"
-  secure_cookies: true
+  - id: cache
+    url: "{{ env CACHE_URL }}"

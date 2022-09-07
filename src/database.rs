@@ -1,5 +1,4 @@
 use serde::Deserialize;
-use std::fmt::Debug;
 
 fn combine_components(
     password: &str,
@@ -18,14 +17,6 @@ fn combine_components(
         scheme = scheme,
         user = user,
     )
-}
-
-#[derive(Clone, Debug, thiserror::Error)]
-pub enum DatabaseConfigError {
-    #[error("invalid database url {0}")]
-    InvalidURL(String),
-    #[error("could not determine database name")]
-    NameUnknown,
 }
 
 #[derive(Clone, Deserialize)]

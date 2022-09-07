@@ -1,8 +1,12 @@
+use handlebars::Handlebars;
+use handlebars::{Context, Helper, HelperResult, Output, RenderContext};
+use std::env;
 use std::fs;
 use std::path::Path;
 
 use crate::load::LoadError::{
     DeserializeError, EnvironmentUnknownError, FileUnreadableError, InvalidPathError,
+    RenderConfigurationError,
 };
 use crate::Config;
 
@@ -16,6 +20,8 @@ pub enum LoadError {
     FileUnreadableError(String),
     #[error("unable to deserialize configuration data")]
     DeserializeError(String),
+    #[error("unable to render configuration file {0}")]
+    RenderConfigurationError(String),
 }
 
 pub fn load(path: &Path) -> Result<Config, LoadError> {
@@ -31,9 +37,29 @@ pub fn load(path: &Path) -> Result<Config, LoadError> {
     Ok(config)
 }
 
-pub fn from_yaml(environment: &str, yaml: &str) -> Result<Config, LoadError> {
+fn from_yaml(environment: &str, yaml: &str) -> Result<Config, LoadError> {
+    let mut handlebars = Handlebars::new();
+    handlebars.register_helper("env", Box::new(env_var_helper));
+
+    let content = handlebars
+        .render_template(yaml, &())
+        .map_err(|e| RenderConfigurationError(e.to_string()))?;
+
     let mut config: Config =
-        serde_yaml::from_str(&yaml).map_err(|e| DeserializeError(e.to_string()))?;
+        serde_yaml::from_str(&content).map_err(|e| DeserializeError(e.to_string()))?;
     config.set_environment(environment);
     Ok(config)
+}
+
+fn env_var_helper(
+    h: &Helper,
+    _: &Handlebars,
+    _: &Context,
+    _: &mut RenderContext,
+    out: &mut dyn Output,
+) -> HelperResult {
+    let key = h.param(0).unwrap().relative_path().unwrap();
+    let env_var = env::var(key).unwrap();
+    out.write(&env_var)?;
+    Ok(())
 }
