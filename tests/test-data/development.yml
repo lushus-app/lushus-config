@@ -11,7 +11,7 @@ databases:
     username: "user"
     password: "password"
     host: "localhost"
-    port: 5432
+    port: {{ env DATABASE_PORT }}
     name: "backup"
 
   - id: cache

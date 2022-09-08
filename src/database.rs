@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use url::Url;
 
 fn combine_components(
     password: &str,
@@ -60,6 +61,21 @@ impl Database {
             } => combine_components(password, host, name, port, scheme, username),
         }
     }
+
+    pub fn name(&self) -> String {
+        // TODO: error handling for invalid url
+        // TODO: error handling for invalid path segments
+        let url = Url::parse(&self.url()).unwrap();
+        let path_segments = url
+            .path_segments()
+            .map(|path| path.collect::<Vec<_>>())
+            .unwrap_or_default();
+        let name = path_segments
+            .first()
+            .unwrap_or(&"INVALID DATABASE NAME")
+            .to_string();
+        name
+    }
 }
 
 #[cfg(test)]
@@ -77,6 +93,7 @@ mod test {
             definition,
         };
         assert_eq!(database.url(), url);
+        assert_eq!(database.name(), "development");
     }
 
     #[test]
@@ -95,6 +112,7 @@ mod test {
             definition,
         };
         assert_eq!(database.url(), url);
+        assert_eq!(database.name(), "development");
     }
 
     #[test]
@@ -106,6 +124,7 @@ mod test {
         "#;
         let database: Database = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(database.url(), url);
+        assert_eq!(database.name(), "development");
     }
 
     #[test]
@@ -122,5 +141,6 @@ mod test {
         "#;
         let database: Database = serde_yaml::from_str(yaml).unwrap();
         assert_eq!(database.url(), url);
+        assert_eq!(database.name(), "development");
     }
 }

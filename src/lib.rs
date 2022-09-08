@@ -4,9 +4,9 @@ mod load;
 mod server;
 mod session;
 
-use config::Config;
 use database::Database;
 use server::Server;
 use session::Session;
 
+pub use config::Config;
 pub use load::load;

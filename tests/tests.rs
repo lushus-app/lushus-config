@@ -25,6 +25,8 @@ mod tests {
 
     #[test]
     fn load_parses_databases() {
+        env::set_var("DATABASE_PORT", "5432");
+
         let path = Path::new("./tests/test-data/development.yml");
         let config = load(path).unwrap();
         let databases = config.databases();
