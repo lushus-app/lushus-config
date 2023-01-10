@@ -3,9 +3,12 @@ mod tests {
     use lushus_config::load;
     use std::env;
     use std::path::Path;
+    use std::time::Duration;
 
     #[test]
     fn load_parses_environment() {
+        env::set_var("DATABASE_PORT", "5432");
+
         let path = Path::new("./tests/test-data/development.yml");
         let config = load(path).unwrap();
         let environment = config.environment();
@@ -15,6 +18,8 @@ mod tests {
 
     #[test]
     fn load_parses_server() {
+        env::set_var("DATABASE_PORT", "5432");
+
         let path = Path::new("./tests/test-data/development.yml");
         let config = load(path).unwrap();
         let server = config.server();
@@ -39,6 +44,24 @@ mod tests {
 
         let expected_url = "redis://:password@localhost:6379/1";
         assert_eq!(databases[2].url(), expected_url);
+    }
+
+    #[test]
+    fn load_parses_session() {
+        env::set_var("DATABASE_PORT", "5432");
+
+        let path = Path::new("./tests/test-data/development.yml");
+        let config = load(path).unwrap();
+        let session = config.session().unwrap();
+
+        let expected_encryption_key = "abc-123-def";
+        assert_eq!(session.encryption_key, expected_encryption_key);
+
+        let expected_timeout = Duration::from_secs(3600);
+        assert_eq!(session.timeout, expected_timeout);
+
+        let expected_secure_cookies = false;
+        assert_eq!(session.secure_cookies, expected_secure_cookies);
     }
 
     #[test]

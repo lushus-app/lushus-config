@@ -24,4 +24,5 @@ databases:
 
 session:
   encryption_key: "abc-123-def"
-  secure_cookies: true
+  timeout: 3600
+  secure_cookies: false
