@@ -3,7 +3,7 @@ use serde::Deserialize;
 #[derive(Clone, Deserialize)]
 pub struct Server {
     host: String,
-    port: u16,
+    port: Option<u16>,
 }
 
 impl Server {
@@ -11,7 +11,7 @@ impl Server {
         &self.host
     }
 
-    pub fn port(&self) -> u16 {
+    pub fn port(&self) -> Option<u16> {
         self.port
     }
 }
