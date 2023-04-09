@@ -1,8 +1,5 @@
-use handlebars::Handlebars;
-use handlebars::{Context, Helper, HelperResult, Output, RenderContext};
-use std::env;
-use std::fs;
-use std::path::Path;
+use handlebars::{Context, Handlebars, Helper, HelperResult, Output, RenderContext, RenderError};
+use std::{env, fs, path::Path};
 
 use crate::load::LoadError::{
     DeserializeError, EnvironmentUnknownError, FileUnreadableError, InvalidPathError,
@@ -32,7 +29,7 @@ pub fn load(path: &Path) -> Result<Config, LoadError> {
         .to_str()
         .unwrap()
         .to_string();
-    let yaml = fs::read_to_string(path).map_err(|e| FileUnreadableError(path_str.to_string()))?;
+    let yaml = fs::read_to_string(path).map_err(|_| FileUnreadableError(path_str.to_string()))?;
     let config = from_yaml(&environment, &yaml)?;
     Ok(config)
 }
@@ -58,8 +55,13 @@ fn env_var_helper(
     _: &mut RenderContext,
     out: &mut dyn Output,
 ) -> HelperResult {
-    let key = h.param(0).unwrap().relative_path().unwrap();
-    let env_var = env::var(key).unwrap();
+    let key = h
+        .param(0)
+        .ok_or(RenderError::new("param not found"))?
+        .relative_path()
+        .ok_or(RenderError::new("invalid param"))?;
+    let env_var = env::var(key)
+        .map_err(|_| RenderError::new(format!("environment variable {key} not found")))?;
     out.write(&env_var)?;
     Ok(())
 }
