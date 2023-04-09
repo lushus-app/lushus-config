@@ -32,7 +32,7 @@ pub fn load(path: &Path) -> Result<Config, LoadError> {
         .to_str()
         .unwrap()
         .to_string();
-    let yaml = fs::read_to_string(path).map_err(|e| FileUnreadableError(e.to_string()))?;
+    let yaml = fs::read_to_string(path).map_err(|e| FileUnreadableError(path_str.to_string()))?;
     let config = from_yaml(&environment, &yaml)?;
     Ok(config)
 }
