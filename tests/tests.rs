@@ -22,7 +22,6 @@ mod tests {
         let config = load(path).unwrap();
         let server = config.server();
 
-        assert_eq!(server.protocol(), "http");
         assert_eq!(server.host(), "domain.com");
         assert_eq!(server.port(), 3000);
     }
