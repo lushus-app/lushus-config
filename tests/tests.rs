@@ -17,17 +17,6 @@ mod tests {
     }
 
     #[test]
-    fn load_parses_simple_server() {
-        let path = Path::new("./tests/test-data/simple_server.yml");
-        let config = load(path).unwrap();
-        let server = config.server();
-
-        assert_eq!(server.protocol(), "http");
-        assert_eq!(server.host(), "domain.com");
-        assert_eq!(server.port(), None);
-    }
-
-    #[test]
     fn load_parses_server() {
         let path = Path::new("./tests/test-data/server.yml");
         let config = load(path).unwrap();
@@ -35,7 +24,7 @@ mod tests {
 
         assert_eq!(server.protocol(), "http");
         assert_eq!(server.host(), "domain.com");
-        assert_eq!(server.port(), Some(3000));
+        assert_eq!(server.port(), 3000);
     }
 
     #[test]

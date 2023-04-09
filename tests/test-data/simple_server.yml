@@ -1,5 +1,0 @@
-server:
-  protocol: "http"
-  host: "domain.com"
-
-databases:
