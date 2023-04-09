@@ -1,5 +1,6 @@
 server:
-  host: "http://domain.com"
+  protocol: "http"
+  host: "domain.com"
   port: 3000
 
 databases:

@@ -18,11 +18,12 @@ mod tests {
 
     #[test]
     fn load_parses_simple_server() {
-        let path = Path::new("test-data/simple_server.yml");
+        let path = Path::new("./tests/test-data/simple_server.yml");
         let config = load(path).unwrap();
         let server = config.server();
 
-        assert_eq!(server.host(), "https://domain.com");
+        assert_eq!(server.protocol(), "http");
+        assert_eq!(server.host(), "domain.com");
         assert_eq!(server.port(), None);
     }
 
@@ -32,7 +33,8 @@ mod tests {
         let config = load(path).unwrap();
         let server = config.server();
 
-        assert_eq!(server.host(), "http://domain.com");
+        assert_eq!(server.protocol(), "http");
+        assert_eq!(server.host(), "domain.com");
         assert_eq!(server.port(), Some(3000));
     }
 
