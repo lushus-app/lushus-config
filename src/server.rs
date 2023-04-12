@@ -1,5 +1,6 @@
-use serde::Deserialize;
 use std::fmt::{Display, Formatter};
+
+use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
 pub struct Server {

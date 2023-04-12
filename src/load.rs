@@ -1,11 +1,14 @@
-use handlebars::{Context, Handlebars, Helper, HelperResult, Output, RenderContext, RenderError};
 use std::{env, fs, path::Path};
 
-use crate::load::LoadError::{
-    DeserializeError, EnvironmentUnknownError, FileUnreadableError, InvalidPathError,
-    RenderConfigurationError,
+use handlebars::{Context, Handlebars, Helper, HelperResult, Output, RenderContext, RenderError};
+
+use crate::{
+    load::LoadError::{
+        DeserializeError, EnvironmentUnknownError, FileUnreadableError, InvalidPathError,
+        RenderConfigurationError,
+    },
+    Config,
 };
-use crate::Config;
 
 #[derive(Debug, thiserror::Error)]
 pub enum LoadError {

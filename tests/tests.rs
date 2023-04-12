@@ -1,9 +1,8 @@
 #[cfg(test)]
 mod tests {
+    use std::{env, path::Path, time::Duration};
+
     use lushus_config::load;
-    use std::env;
-    use std::path::Path;
-    use std::time::Duration;
 
     #[test]
     fn load_parses_environment() {
