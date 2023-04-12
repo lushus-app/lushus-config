@@ -13,8 +13,10 @@ pub fn get_config() -> anyhow::Result<Config> {
         .ok()
         .ok_or(ConfigError::EnvironmentNotSpecified)?;
 
-    // Relative to the CWD (current working directory)
-    let environments_dir = "./environment";
+    let environments_dir = std::env::var("LUSHUS_ENVIRONMENTS_DIR")
+        .ok()
+        .unwrap_or("./environment".to_string());
+
     let path_string = format!(
         "{environments_dir}/{environment}.yml",
         environments_dir = environments_dir,
