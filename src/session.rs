@@ -11,3 +11,13 @@ pub struct Session {
     pub timeout: Duration,
     pub secure_cookies: bool,
 }
+
+impl Default for Session {
+    fn default() -> Self {
+        Self {
+            encryption_key: "".to_string(),
+            timeout: Duration::new(3600, 0),
+            secure_cookies: false,
+        }
+    }
+}
