@@ -1,12 +1,13 @@
 use serde::Deserialize;
 
-use crate::{Database, Server, Session};
+use crate::{Cors, Database, Server, Session};
 
 #[derive(Clone, Deserialize)]
 pub struct Config {
     #[serde(skip_deserializing)]
     environment: String,
     server: Server,
+    cors: Option<Cors>,
     databases: Vec<Database>,
     session: Option<Session>,
 }
@@ -22,6 +23,10 @@ impl Config {
 
     pub fn server(&self) -> &Server {
         &self.server
+    }
+
+    pub fn cors(&self) -> Option<&Cors> {
+        self.cors.as_ref()
     }
 
     pub fn databases(&self) -> &[Database] {

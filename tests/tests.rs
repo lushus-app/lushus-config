@@ -9,7 +9,7 @@ mod tests {
         env::set_var("DATABASE_PORT", "5432");
 
         let path = Path::new("./tests/test-data/development.yml");
-        let config = load(path).unwrap();
+        let config = load(path).expect("unable to read test data");
         let environment = config.environment();
 
         assert_eq!(environment, "development");
@@ -18,7 +18,7 @@ mod tests {
     #[test]
     fn load_parses_server() {
         let path = Path::new("./tests/test-data/server.yml");
-        let config = load(path).unwrap();
+        let config = load(path).expect("unable to read test data");
         let server = config.server();
 
         assert_eq!(server.host(), "domain.com");
@@ -26,11 +26,21 @@ mod tests {
     }
 
     #[test]
+    fn load_parses_cors() {
+        let path = Path::new("./tests/test-data/cors.yml");
+        let config = load(path).expect("unable to read test data");
+        let cors = config.cors().unwrap();
+
+        let expected_allowed_origins = ["https://abc.com", "https://xyz.com", "https://123.com"];
+        assert_eq!(cors.allowed_origins, expected_allowed_origins);
+    }
+
+    #[test]
     fn load_parses_databases() {
         env::set_var("DATABASE_PORT", "5432");
 
         let path = Path::new("./tests/test-data/development.yml");
-        let config = load(path).unwrap();
+        let config = load(path).expect("unable to read test data");
         let databases = config.databases();
 
         let expected_url = "postgres://user:password@localhost:5432/development";
@@ -48,7 +58,7 @@ mod tests {
         env::set_var("DATABASE_PORT", "5432");
 
         let path = Path::new("./tests/test-data/development.yml");
-        let config = load(path).unwrap();
+        let config = load(path).expect("unable to read test data");
         let session = config.session().unwrap();
 
         let expected_encryption_key = "abc-123-def";
@@ -69,7 +79,7 @@ mod tests {
         env::set_var("CACHE_URL", CACHE_URL);
 
         let path = Path::new("./tests/test-data/production.yml");
-        let config = load(path).unwrap();
+        let config = load(path).expect("unable to read test data");
         let databases = config.databases();
 
         let expected_url = DATABASE_URL;
