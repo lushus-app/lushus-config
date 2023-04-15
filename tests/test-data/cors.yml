@@ -1,0 +1,11 @@
+server:
+  host: "domain.com"
+  port: 3000
+
+databases:
+
+cors:
+  allowed_origins:
+    - "https://abc.com"
+    - "https://xyz.com"
+    - "https://123.com"

@@ -1,5 +1,4 @@
 server:
-  protocol: "http"
   host: "domain.com"
   port: 3000
 
